@@ -16,7 +16,6 @@ module.exports = {
                 return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
                     code: Constants.HTTP_CODE_INTERNAL_ERROR,
                     message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
-                    error: err
                 })
             }
 
@@ -36,7 +35,6 @@ module.exports = {
                 return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
                     code: Constants.HTTP_CODE_INTERNAL_ERROR,
                     message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
-                    error: err
                 });
             }
 
@@ -66,7 +64,6 @@ module.exports = {
                         return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
                             code: Constants.HTTP_CODE_INTERNAL_ERROR,
                             message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
-                            error: err
                         });
                     }
                     

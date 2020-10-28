@@ -1,0 +1,126 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",  
+        "title": "ExchangeBooks API",
+        "description": "API documentation",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:5000",
+    "basePath": "/api/",
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API for users in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "paths": {
+        "/users/login" : {
+            "post" : {
+                "tags": [
+                    "Users"
+                ],
+                "description" : "Login endpoint",
+                "security":[
+                    {
+                        "basicAuth" : []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "basic auth"
+                    },
+                    {
+                        "name" : "body",
+                        "required": true,
+                        "in" : "body",
+                        "schema" : {
+                            "$ref" : "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/LoginResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+
+
+    "definitions" : {
+        "LoginRequest" : {
+            "required": [
+                "email",
+                "psw"
+            ],
+            "properties": {
+                "email" : {
+                    "type": "string"
+                },
+                "psw" : {
+                    "type" : "string"
+                }
+            }
+        },
+        "LoginResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "type" : "string"
+                },
+                "result" : {
+                    "$ref" : "#/definitions/TokenResponse"
+                }
+            }
+        },
+        "TokenResponse": {
+            "properties": {
+                "bearerToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "BadResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "type" : "string"
+                }
+            }
+        }
+    }
+}
