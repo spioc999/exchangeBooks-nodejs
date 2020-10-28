@@ -26,11 +26,6 @@
     "produces": [
         "application/json"
     ],
-    "securityDefinitions": {
-        "basicAuth": {
-            "type": "basic"
-        }
-    },
     "paths": {
         "/users/login" : {
             "post" : {
@@ -38,17 +33,12 @@
                     "Users"
                 ],
                 "description" : "Login endpoint",
-                "security":[
-                    {
-                        "basicAuth" : []
-                    }
-                ],
                 "parameters": [
                     {
                         "name" : "Authorization",
                         "in" : "header",
                         "required" : true,
-                        "description" : "basic auth"
+                        "description" : "Basic clientId:clientSecret in base64"
                     },
                     {
                         "name" : "body",
@@ -72,8 +62,46 @@
                     }
                 }
             }
+        },
+        "/users/" : {
+            "post" : {
+                "tags": [
+                    "Users"
+                ],
+                "description" : "Registration endpoint",
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Basic clientId:clientSecret in base64"
+                    },
+                    {
+                        "name" : "body",
+                        "required": true,
+                        "in" : "body",
+                        "schema" : {
+                            "$ref" : "#/definitions/RegistrationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/OkResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
         }
     },
+
+
 
 
 
@@ -92,13 +120,46 @@
                 }
             }
         },
+        "RegistrationRequest" : {
+            "required": [
+                "username",
+                "psw",
+                "email",
+                "lastName",
+                "firstName",
+                "cap"
+            ],
+            "properties": {
+                "username" : {
+                    "type": "string"
+                },
+                "psw" : {
+                    "type" : "string"
+                },
+                "email" : {
+                    "type" : "string"
+                },
+                "lastName" : {
+                    "type" : "string"
+                },
+                "firstName" : {
+                    "type" : "string"
+                },
+                "cap" : {
+                    "type" : "string"
+                }
+            }
+        },
         "LoginResponse" : {
             "properties": {
                 "code" : {
                     "type": "integer"
                 },
                 "message" : {
-                    "type" : "string"
+                    "enum": [
+                        "SUCCESS"
+                      ],
+                    "type": "string"
                 },
                 "result" : {
                     "$ref" : "#/definitions/TokenResponse"
@@ -108,6 +169,19 @@
         "TokenResponse": {
             "properties": {
                 "bearerToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "OkResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "enum": [
+                        "SUCCESS"
+                      ],
                     "type": "string"
                 }
             }
