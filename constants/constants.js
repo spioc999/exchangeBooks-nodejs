@@ -1,6 +1,8 @@
 module.exports = Object.freeze({
     HTTP_CODE_OK : 200,
     HTTP_MESSAGE_OK : "SUCCESS",
+    HTTP_CODE_RESULT_EMPTY: -1,
+    HTTP_MESSAGE_RESULT_EMPTY : "RESULT EMPTY",
     HTTP_CODE_FORBIDDEN : 403,
     HTTP_MESSAGE_FORBIDDEN : "Invalid token: access token is invalid",
     HTTP_CODE_INTERNAL_ERROR : 500,
