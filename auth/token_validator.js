@@ -18,7 +18,7 @@ module.exports = {
                     });
 
                 }else{
-
+                    console.log(authData);
                     req.authData = authData;
                     next();
 

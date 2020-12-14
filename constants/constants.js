@@ -10,9 +10,13 @@ module.exports = Object.freeze({
     HTTP_MESSAGE_INTERNAL_ERROR : "Internal error",
     HTTP_CODE_UNAUTHORIZED : 401,
     HTTP_MESSAGE_UNAUTHORIZED : "Unathorized: invalid email or password",
+    HTTP_CODE_NOTFOUND: 404,
+    HTTP_MESSAGE_NOTFOUND : "NOT FOUND",
+    //BasicAuth
     HTTP_MESSAGE_ERROR_BASIC_AUTH : "Unauthorized: invalid basic auth",
     CLIENT_ID : "ExchangeBooksFlutterApp",
     CLIENT_SECRET : "yK23YvAbWkEVr2G3",
+    //JWT
     EXPIRATION_TOKEN : "1h",
     SALT_PSW : 10
 });

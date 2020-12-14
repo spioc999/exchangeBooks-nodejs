@@ -3,6 +3,8 @@ const { hashSync, genSaltSync, compareSync } = require("bcrypt");
 const { create, getUserByEmail, getUserById } = require("./users.service");
 const { generateToken } = require("../../auth/token_validator");
 
+const {User, UserNoId} = require("../../model/User");
+
 module.exports = {
     createUser : (req, res) => {
         const body = req.body;
@@ -49,16 +51,9 @@ module.exports = {
 
             if(resultPswCheck){
 
-                const user = {
-                    id : result.Id,
-                    username : result.Username,
-                    email : result.Email,
-                    lastName : result.LastName,
-                    firstName : result.FirstName,
-                    cap : result.Cap
-                }
-                
-                generateToken(user, (err, token) => {
+                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
+                                
+                generateToken({user}, (err, token) => {
 
                     if(err){
                         return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
@@ -66,14 +61,8 @@ module.exports = {
                             message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
                         });
                     }
-                    
-                    const userToSend = {
-                        username : result.Username,
-                        email : result.Email,
-                        lastName : result.LastName,
-                        firstName : result.FirstName,
-                        cap : result.Cap
-                    }
+
+                    const userToSend = new UserNoId(result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
 
                     return res.status(Constants.HTTP_CODE_OK).json({
                         code: Constants.HTTP_CODE_OK,
@@ -116,13 +105,7 @@ module.exports = {
                 });
             }else{
 
-                const user = {
-                    username : result.Username,
-                    email : result.Email,
-                    lastName : result.LastName,
-                    firstName : result.FirstName,
-                    cap : result.Cap
-                }
+                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
     
                 return res.status(Constants.HTTP_CODE_OK).json({
                     code: Constants.HTTP_CODE_OK,
