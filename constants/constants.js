@@ -1,6 +1,8 @@
 module.exports = Object.freeze({
     HTTP_CODE_OK : 200,
     HTTP_MESSAGE_OK : "SUCCESS",
+    HTTP_CODE_RESULT_EMPTY: -1,
+    HTTP_MESSAGE_RESULT_EMPTY : "RESULT EMPTY",
     HTTP_CODE_FORBIDDEN : 403,
     HTTP_MESSAGE_FORBIDDEN : "Invalid token: access token is invalid",
     HTTP_CODE_INTERNAL_ERROR : 500,
@@ -8,9 +10,17 @@ module.exports = Object.freeze({
     HTTP_MESSAGE_INTERNAL_ERROR : "Internal error",
     HTTP_CODE_UNAUTHORIZED : 401,
     HTTP_MESSAGE_UNAUTHORIZED : "Unathorized: invalid email or password",
+    HTTP_CODE_NOTFOUND: 404,
+    HTTP_MESSAGE_NOTFOUND : "NOT FOUND",
+    HTTP_MESSAGE_EMPTY_BODY : "EMPTY BODY",
+    HTTP_MESSAGE_INVALID_PARAMS : "INVALID PARAMS",
+    CODE_ERROR_RECORD_NOT_OWNED : 20,
+    MESSAGE_ERROR_RECORD_NOT_OWNED : "RECORD NOT OWNED",
+    //BasicAuth
     HTTP_MESSAGE_ERROR_BASIC_AUTH : "Unauthorized: invalid basic auth",
     CLIENT_ID : "ExchangeBooksFlutterApp",
     CLIENT_SECRET : "yK23YvAbWkEVr2G3",
+    //JWT
     EXPIRATION_TOKEN : "1h",
     SALT_PSW : 10
 });

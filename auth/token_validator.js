@@ -18,19 +18,18 @@ module.exports = {
                     });
 
                 }else{
-
+                    //console.log(authData.user.id);
                     req.authData = authData;
-                    return next();
+                    next();
 
                 }
             })
+        }else{
+            return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
+                code: Constants.HTTP_CODE_FORBIDDEN,
+                message : Constants.HTTP_MESSAGE_FORBIDDEN
+            });
         }
-
-        return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
-            code: Constants.HTTP_CODE_FORBIDDEN,
-            message : Constants.HTTP_MESSAGE_FORBIDDEN
-        });
-
     },
 
     generateToken : (user, callback) => {

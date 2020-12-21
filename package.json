@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "spioc_999",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "basic-auth": "^2.0.1",
     "bcrypt": "^5.0.0",
@@ -16,6 +16,9 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "request": "^2.88.2",
+    "swagger-jsdoc": "^5.0.0",
+    "swagger-ui-express": "^4.1.4",
     "tsscmp": "^1.0.6"
   }
 }
