@@ -8,6 +8,14 @@ const {User, UserNoId} = require("../../model/User");
 module.exports = {
     createUser : (req, res) => {
         const body = req.body;
+
+        if(!body){
+            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                code: Constants.HTTP_CODE_NOTFOUND,
+                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
+            });
+        }
+
         const salt = genSaltSync(Constants.SALT_PSW); //encryption of the password
         body.psw = hashSync(body.psw, salt);
 
@@ -30,6 +38,14 @@ module.exports = {
 
     loginUser : (req, res) => {
         const body = req.body;
+        
+        if(!body){
+            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                code: Constants.HTTP_CODE_NOTFOUND,
+                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
+            });
+        }
+
         getUserByEmail(body.email, (err, result) => {
 
             if(err){
@@ -89,6 +105,14 @@ module.exports = {
 
     getUserInfo : (req, res) => {
         const id = req.params.id;
+
+        if(!id || id.includes("&") || id.includes("|")){
+            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                code: Constants.HTTP_CODE_NOTFOUND,
+                message: Constants.HTTP_MESSAGE_NOTFOUND,
+            });
+        }
+
         getUserById(id, (err, result) => {
             if(err){
                 console.log(err);

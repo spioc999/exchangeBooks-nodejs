@@ -18,7 +18,7 @@ swaggerDocument = require('./swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));*/
 
 
-//DYNAMIC SWAGGER
+//DYNAMIC SWAGGER TODO
 const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

@@ -12,6 +12,10 @@ module.exports = Object.freeze({
     HTTP_MESSAGE_UNAUTHORIZED : "Unathorized: invalid email or password",
     HTTP_CODE_NOTFOUND: 404,
     HTTP_MESSAGE_NOTFOUND : "NOT FOUND",
+    HTTP_MESSAGE_EMPTY_BODY : "EMPTY BODY",
+    HTTP_MESSAGE_INVALID_PARAMS : "INVALID PARAMS",
+    CODE_ERROR_RECORD_NOT_OWNED : 20,
+    MESSAGE_ERROR_RECORD_NOT_OWNED : "RECORD NOT OWNED",
     //BasicAuth
     HTTP_MESSAGE_ERROR_BASIC_AUTH : "Unauthorized: invalid basic auth",
     CLIENT_ID : "ExchangeBooksFlutterApp",
