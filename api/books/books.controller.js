@@ -1,6 +1,7 @@
 const { getBooksDetails, addBooksDetails, addNewInsertion, getAllUsersInsertions, deleteInsertion, searchBooksInSameProvince, updateBookStatus} = require("./books.service");
 const { Book, BookNoId, Insertion, InsertionFullDetails} = require("../../model/Book");
 const request = require('request');
+const moment = require("moment");
 const Constants = require('../../constants/constants');
 
 module.exports = {
@@ -103,6 +104,7 @@ module.exports = {
         }
 
         body.idUser = req.authData.user.id; //getting the id from token and using it to populate the record in DB
+        body.dateInsertion = moment().toDate();
 
 
         addNewInsertion(body, (err, results) => {
@@ -227,7 +229,7 @@ module.exports = {
             const books = [];
 
             results.forEach(book => {
-                const bookToSend = new InsertionFullDetails(book.Username, book.Username, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
+                const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
                     book.PublishedDate, book.SmallThumbnailLink, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
 
                 books.push(bookToSend);

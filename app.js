@@ -12,17 +12,17 @@ app.use(express.json());
 app.use("/api/users", usersRouter);
 app.use("/api/books", booksRouter);
 
-/* STATIC SWAGGER
+// STATIC SWAGGER
 const swaggerUi = require('swagger-ui-express');
 swaggerDocument = require('./swagger.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));*/
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
 //DYNAMIC SWAGGER TODO
-const swaggerUi = require('swagger-ui-express');
+/*const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
+*/
 
 
 const port = process.env.APP_PORT || 5000;

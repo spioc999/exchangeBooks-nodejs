@@ -31,6 +31,6 @@ const router = require("express").Router();
 router.post("/", basicAuth, createUser);  //new user
 router.post("/login", basicAuth, loginUser); //returning info of the current user
 
-router.get("/:id", checkToken, getUserInfo) //getting info of other users by id
+//router.get("/:id", checkToken, getUserInfo) //getting info of other users by id
 
 module.exports = router;
