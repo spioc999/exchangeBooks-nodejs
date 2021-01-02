@@ -5,12 +5,14 @@ require('dotenv').config();
 //ROUTERS
 const usersRouter = require("./api/users/users.router");
 const booksRouter = require("./api/books/books.router");
+const zipCodesRouter = require("./api/zip_codes/zipCodes.router");
 
 const app = express();
 
 app.use(express.json());
 app.use("/api/users", usersRouter);
 app.use("/api/books", booksRouter);
+app.use("/public/api/cap", zipCodesRouter);
 
 // STATIC SWAGGER
 const swaggerUi = require('swagger-ui-express');

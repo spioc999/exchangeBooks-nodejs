@@ -143,12 +143,12 @@ module.exports = {
                 });
             }
 
-            if(!results){
+            /*if(!results){
                 return res.status(Constants.HTTP_CODE_OK).json({
                     code: Constants.HTTP_CODE_RESULT_EMPTY,
                     message: Constants.HTTP_MESSAGE_RESULT_EMPTY,
                 });
-            }
+            }*/
 
             const insertions = [];
 
