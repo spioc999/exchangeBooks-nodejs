@@ -96,7 +96,8 @@ module.exports = {
             "select U.Username, U.Email, U.LastName, U.FirstName, U.City, B.Isbn, B.Title, B.Authors, B.PublishedDate, B.SmallThumbnailLink, B.ThumbnailLink, " +
             "I.BookStatus, I.Note, I.DateInsertion from Users U inner join Insertions I on U.Id = I.IdUser " + 
             "inner join Books B on I.IdBook = B.Id " + 
-            "where I.IdUser <> ? and U.Province = ? and I.BookStatus <> 3",
+            "where I.IdUser <> ? and U.Province = ? and I.BookStatus <> 3 " + 
+            "order by I.DateInsertion DESC",
             [
                 idUser,
                 province

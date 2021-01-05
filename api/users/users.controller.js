@@ -67,7 +67,7 @@ module.exports = {
 
             if(resultPswCheck){
 
-                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
+                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
                                 
                 generateToken({user}, (err, token) => {
 
@@ -78,7 +78,7 @@ module.exports = {
                         });
                     }
 
-                    const userToSend = new UserNoId(result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
+                    const userToSend = new UserNoId(result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
 
                     return res.status(Constants.HTTP_CODE_OK).json({
                         code: Constants.HTTP_CODE_OK,
@@ -129,7 +129,7 @@ module.exports = {
                 });
             }else{
 
-                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.Cap, result.City, result.Province);
+                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
     
                 return res.status(Constants.HTTP_CODE_OK).json({
                     code: Constants.HTTP_CODE_OK,
