@@ -7,103 +7,129 @@ const {User, UserNoId} = require("../../model/User");
 
 module.exports = {
     createUser : (req, res) => {
-        const body = req.body;
 
-        if(!body){
-            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
-                code: Constants.HTTP_CODE_NOTFOUND,
-                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
-            });
-        }
+        try{
 
-        const salt = genSaltSync(Constants.SALT_PSW); //encryption of the password
-        body.psw = hashSync(body.psw, salt);
+            const body = req.body;
 
-        create(body, (err, result) => {    //callback
-
-            if(err){
-                console.log(err);
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
-                })
+            if(!body){
+                return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                    code: Constants.HTTP_CODE_NOTFOUND,
+                    message: Constants.HTTP_MESSAGE_EMPTY_BODY,
+                });
             }
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
+            const salt = genSaltSync(Constants.SALT_PSW); //encryption of the password
+            body.psw = hashSync(body.psw, salt);
+
+            create(body, (err, result) => {    //callback
+
+                if(err){
+                    console.log(err);
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    })
+                }
+
+                return res.status(Constants.HTTP_CODE_OK).json({
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
+                })
             })
-        })
+
+
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
+
+        }
     },
 
     loginUser : (req, res) => {
-        const body = req.body;
+
+        try{
+            
+            const body = req.body;
         
-        if(!body){
-            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
-                code: Constants.HTTP_CODE_NOTFOUND,
-                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
-            });
-        }
-
-        getUserByEmail(body.email, (err, result) => {
-
-            if(err){
-                console.log(err);
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+            if(!body){
+                return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                    code: Constants.HTTP_CODE_NOTFOUND,
+                    message: Constants.HTTP_MESSAGE_EMPTY_BODY,
                 });
             }
 
-            if(!result){
-                return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
-                    code: Constants.HTTP_CODE_UNAUTHORIZED,
-                    message: Constants.HTTP_MESSAGE_UNAUTHORIZED
-                });
-            }
+            getUserByEmail(body.email, (err, result) => {
 
-            const resultPswCheck = compareSync(body.psw, result.Psw);
+                if(err){
+                    console.log(err);
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
 
-            if(resultPswCheck){
+                if(!result){
+                    return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
+                        code: Constants.HTTP_CODE_UNAUTHORIZED,
+                        message: Constants.HTTP_MESSAGE_UNAUTHORIZED
+                    });
+                }
 
-                const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
-                                
-                generateToken({user}, (err, token) => {
+                const resultPswCheck = compareSync(body.psw, result.Psw);
 
-                    if(err){
-                        return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                            code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                            message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+                if(resultPswCheck){
+
+                    const user = new User(result.Id, result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
+                                    
+                    generateToken({user}, (err, token) => {
+
+                        if(err){
+                            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+                            });
+                        }
+
+                        const userToSend = new UserNoId(result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
+
+                        return res.status(Constants.HTTP_CODE_OK).json({
+                            code: Constants.HTTP_CODE_OK,
+                            message: Constants.HTTP_MESSAGE_OK,
+                            result: {
+                                bearerToken : token,
+                                user: userToSend
+                            },
                         });
-                    }
 
-                    const userToSend = new UserNoId(result.Username, result.Email, result.LastName, result.FirstName, result.City, result.Province);
+                    })
 
-                    return res.status(Constants.HTTP_CODE_OK).json({
-                        code: Constants.HTTP_CODE_OK,
-                        message: Constants.HTTP_MESSAGE_OK,
-                        result: {
-                            bearerToken : token,
-                            user: userToSend
-                        },
+                }else{
+
+                    return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
+                        code: Constants.HTTP_CODE_UNAUTHORIZED,
+                        message: Constants.HTTP_MESSAGE_UNAUTHORIZED
                     });
 
-                })
+                }
 
-            }else{
+            })
 
-                return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
-                    code: Constants.HTTP_CODE_UNAUTHORIZED,
-                    message: Constants.HTTP_MESSAGE_UNAUTHORIZED
-                });
 
-            }
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
 
-        })
+        }
     },
 
-    getUserInfo : (req, res) => {
+    /*getUserInfo : (req, res) => {
         const id = req.params.id;
 
         if(!id || id.includes("&") || id.includes("|")){
@@ -139,5 +165,5 @@ module.exports = {
     
             }
         });
-    }
+    }*/
 }

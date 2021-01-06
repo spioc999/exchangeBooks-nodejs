@@ -6,29 +6,43 @@ module.exports = {
 
     checkToken : (req, res, next) => {
 
-        if(isTokenPresent(req)){
+        try{
 
-            verify(req.token, process.env.KEY_TOKEN, (err, authData) => {
+            if(isTokenPresent(req)){
 
-                if(err){
+                verify(req.token, process.env.KEY_TOKEN, (err, authData) => {
+    
+                    if(err){
+    
+                        return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
+                            code: Constants.HTTP_CODE_FORBIDDEN,
+                            message : Constants.HTTP_MESSAGE_FORBIDDEN
+                        });
+    
+                    }else{
+                        //console.log(authData.user.id);
+                        req.authData = authData;
+                        next();
+    
+                    }
+                })
+                
+            }else{
+                return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
+                    code: Constants.HTTP_CODE_FORBIDDEN,
+                    message : Constants.HTTP_MESSAGE_FORBIDDEN
+                });
+            }
 
-                    return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
-                        code: Constants.HTTP_CODE_FORBIDDEN,
-                        message : Constants.HTTP_MESSAGE_FORBIDDEN
-                    });
 
-                }else{
-                    //console.log(authData.user.id);
-                    req.authData = authData;
-                    next();
 
-                }
-            })
-        }else{
-            return res.status(Constants.HTTP_CODE_FORBIDDEN).json({
-                code: Constants.HTTP_CODE_FORBIDDEN,
-                message : Constants.HTTP_MESSAGE_FORBIDDEN
+        }catch(error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
             });
+
         }
     },
 

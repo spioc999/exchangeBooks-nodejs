@@ -5,16 +5,27 @@ const Constants = require("../constants/constants");
 module.exports = {
     basicAuth : (req, res, next) => {
 
-        var credentials = auth(req);
+        try{
 
-        if(!credentials || !check(credentials.name, credentials.pass)){
-            return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
-                code: Constants.HTTP_CODE_UNAUTHORIZED,
-                message: Constants.HTTP_MESSAGE_ERROR_BASIC_AUTH
+            var credentials = auth(req);
+
+            if(!credentials || !check(credentials.name, credentials.pass)){
+                return res.status(Constants.HTTP_CODE_UNAUTHORIZED).json({
+                    code: Constants.HTTP_CODE_UNAUTHORIZED,
+                    message: Constants.HTTP_MESSAGE_ERROR_BASIC_AUTH
+                });
+            }
+
+            next();
+            
+        }catch(error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
             });
-        }
 
-        next();
+        }
 
     }
 }

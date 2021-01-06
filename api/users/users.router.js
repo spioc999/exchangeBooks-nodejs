@@ -1,4 +1,4 @@
-const { createUser, loginUser, getUserInfo} = require("./users.controller");
+const { createUser, loginUser} = require("./users.controller");
 const { checkToken } = require("../../auth/token_validator");
 const { basicAuth } = require("../../auth/basic_auth");
 

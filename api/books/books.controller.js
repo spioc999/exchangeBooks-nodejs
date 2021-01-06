@@ -6,7 +6,9 @@ const Constants = require('../../constants/constants');
 
 module.exports = {
     getBookByIsbn : (req, res) => {
-        const isbn = req.params.isbn;
+
+        try{
+            const isbn = req.params.isbn;
 
         if(!isbn || isbn.includes("&") || isbn.includes("|")){
             return res.status(Constants.HTTP_CODE_NOTFOUND).json({
@@ -41,14 +43,30 @@ module.exports = {
 
                         const bookFromGoogle = bodyParsed.items[0].volumeInfo;
 
-                        const bookToAdd = new BookNoId(
-                            getIsbn13(bookFromGoogle.industryIdentifiers),
-                            bookFromGoogle.title,
-                            getAuthorStringFromArray(bookFromGoogle.authors),
-                            bookFromGoogle.publishedDate,
-                            bookFromGoogle.imageLinks.smallThumbnail,
-                            bookFromGoogle.imageLinks.thumbnail
-                        );
+                        console.log(bookFromGoogle);
+
+                        let bookToAdd;
+
+                        if(bookFromGoogle.imageLinks){
+                            bookToAdd = new BookNoId(
+                                getIsbn13(bookFromGoogle.industryIdentifiers),
+                                bookFromGoogle.title,
+                                getAuthorStringFromArray(bookFromGoogle.authors),
+                                bookFromGoogle.publishedDate,
+                                bookFromGoogle.imageLinks.smallThumbnail,
+                                bookFromGoogle.imageLinks.thumbnail
+                            );
+                        }else{
+                            bookToAdd = new BookNoId(
+                                getIsbn13(bookFromGoogle.industryIdentifiers),
+                                bookFromGoogle.title,
+                                getAuthorStringFromArray(bookFromGoogle.authors),
+                                bookFromGoogle.publishedDate,
+                                "https://via.placeholder.com/210x300?text=NO+IMAGE",
+                                "https://via.placeholder.com/210x300?text=NO+IMAGE"
+                            );
+                        }
+
 
                         addBooksDetails(bookToAdd, (err, results) => {
                             if(err){
@@ -91,205 +109,277 @@ module.exports = {
             }
 
         })
+
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
+
+        }
+        
     },
     addNewInsertion : (req, res) => {
 
-        const body = req.body;
+        try{
 
-        if(!body){
-            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
-                code: Constants.HTTP_CODE_NOTFOUND,
-                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
-            });
-        }
+            const body = req.body;
 
-        body.idUser = req.authData.user.id; //getting the id from token and using it to populate the record in DB
-        body.dateInsertion = moment().toDate();
-
-
-        addNewInsertion(body, (err, results) => {
-            
-            if(err){
-
-                console.log(err);
-
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+            if(!body){
+                return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                    code: Constants.HTTP_CODE_NOTFOUND,
+                    message: Constants.HTTP_MESSAGE_EMPTY_BODY,
                 });
             }
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
+            body.idUser = req.authData.user.id; //getting the id from token and using it to populate the record in DB
+            body.dateInsertion = moment().toDate();
+
+
+            addNewInsertion(body, (err, results) => {
+                
+                if(err){
+
+                    console.log(err);
+
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
+
+                return res.status(Constants.HTTP_CODE_OK).json({
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
+                });
+
             });
 
-        });
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
+
+        }
+
+        
 
     },
     getAllUsersInsertions : (req, res) => {
 
-        const idUser = req.authData.user.id;
+        try{
 
-        getAllUsersInsertions(idUser, (err, results) => {
-            
-            if(err){
+            const idUser = req.authData.user.id;
 
-                console.log(err);
+            getAllUsersInsertions(idUser, (err, results) => {
+                
+                if(err){
 
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    console.log(err);
+
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
+
+                const insertions = [];
+
+                results.forEach((el) => {
+                    const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.Authors, el.PublishedDate, el.SmallThumbnailLink, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
+                    insertions.push(insertion);
                 });
-            }
 
-            /*if(!results){
                 return res.status(Constants.HTTP_CODE_OK).json({
-                    code: Constants.HTTP_CODE_RESULT_EMPTY,
-                    message: Constants.HTTP_MESSAGE_RESULT_EMPTY,
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
+                    result: insertions
                 });
-            }*/
 
-            const insertions = [];
+            })
 
-            results.forEach((el) => {
-                const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.Authors, el.PublishedDate, el.SmallThumbnailLink, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
-                insertions.push(insertion);
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
             });
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
-                result: insertions
-            });
-
-        })
-    },
-    deleteInsertion : (req, res) => {
-        const idInsertion = req.params.id;
-
-        if(!idInsertion || idInsertion.includes("&") || idInsertion.includes("|")){
-            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
-                code: Constants.HTTP_CODE_NOTFOUND,
-                message: Constants.HTTP_MESSAGE_INVALID_PARAMS,
-            });
         }
 
-        const idUser = req.authData.user.id;
+        
+    },
+    deleteInsertion : (req, res) => {
 
-        deleteInsertion(idInsertion, idUser, (err, result) => {
 
-            if(err){
+        try{
 
-                console.log(err);
+            const idInsertion = req.params.id;
 
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+            if(!idInsertion || idInsertion.includes("&") || idInsertion.includes("|")){
+                return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                    code: Constants.HTTP_CODE_NOTFOUND,
+                    message: Constants.HTTP_MESSAGE_INVALID_PARAMS,
                 });
             }
 
-            if(!result){
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
-                });
-            }
+            const idUser = req.authData.user.id;
 
-            if(result.affectedRows <= 0){
+            deleteInsertion(idInsertion, idUser, (err, result) => {
+
+                if(err){
+
+                    console.log(err);
+
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
+
+                if(!result){
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+                    });
+                }
+
+                if(result.affectedRows <= 0){
+                    return res.status(Constants.HTTP_CODE_OK).json({
+                        code: Constants.CODE_ERROR_RECORD_NOT_OWNED,
+                        message: Constants.MESSAGE_ERROR_RECORD_NOT_OWNED,
+                    });
+                }
+
                 return res.status(Constants.HTTP_CODE_OK).json({
-                    code: Constants.CODE_ERROR_RECORD_NOT_OWNED,
-                    message: Constants.MESSAGE_ERROR_RECORD_NOT_OWNED,
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
                 });
-            }
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
             });
 
-        });
+
+
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
+
+        }
+
+        
     },
     searchBooksInSameProvince : (req, res) => {
-        const idUser = req.authData.user.id;
-        const province = req.authData.user.province;
 
-        searchBooksInSameProvince(idUser, province, (err, results) => {
+        try{
 
-            if(err){
+            const idUser = req.authData.user.id;
+            const province = req.authData.user.province;
 
-                console.log(err);
+            searchBooksInSameProvince(idUser, province, (err, results) => {
 
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                if(err){
+
+                    console.log(err);
+
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
+
+                const books = [];
+
+                results.forEach(book => {
+                    const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
+                        book.PublishedDate, book.SmallThumbnailLink, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
+
+                    books.push(bookToSend);
                 });
-            }
 
-            const books = [];
-
-            results.forEach(book => {
-                const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
-                    book.PublishedDate, book.SmallThumbnailLink, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
-
-                books.push(bookToSend);
+                return res.status(Constants.HTTP_CODE_OK).json({
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
+                    result: books
+                });
+                
             });
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
-                result: books
-            });
+        }catch (error){
             
-        });
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+            });
+
+        }
+
+        
 
     },
     updateBookStatus : (req, res) => {
-        const body = req.body;
 
-        if(!body){
-            return res.status(Constants.HTTP_CODE_NOTFOUND).json({
-                code: Constants.HTTP_CODE_NOTFOUND,
-                message: Constants.HTTP_MESSAGE_EMPTY_BODY,
-            });
-        }
+        try{
 
-        const idUser = req.authData.user.id;
+            const body = req.body;
 
-        updateBookStatus(body, idUser, (err, result) => {
-
-            if(err){
-
-                console.log(err);
-
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+            if(!body){
+                return res.status(Constants.HTTP_CODE_NOTFOUND).json({
+                    code: Constants.HTTP_CODE_NOTFOUND,
+                    message: Constants.HTTP_MESSAGE_EMPTY_BODY,
                 });
             }
 
+            const idUser = req.authData.user.id;
 
-            if(!result){
-                return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
-                    code: Constants.HTTP_CODE_INTERNAL_ERROR,
-                    message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
-                });
-            }
+            updateBookStatus(body, idUser, (err, result) => {
 
-            if(result.affectedRows <= 0){
+                if(err){
+
+                    console.log(err);
+
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_DATABASE_ERROR,
+                    });
+                }
+
+
+                if(!result){
+                    return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                        code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                        message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
+                    });
+                }
+
+                if(result.affectedRows <= 0){
+                    return res.status(Constants.HTTP_CODE_OK).json({
+                        code: Constants.CODE_ERROR_RECORD_NOT_OWNED,
+                        message: Constants.MESSAGE_ERROR_RECORD_NOT_OWNED,
+                    });
+                }
+
                 return res.status(Constants.HTTP_CODE_OK).json({
-                    code: Constants.CODE_ERROR_RECORD_NOT_OWNED,
-                    message: Constants.MESSAGE_ERROR_RECORD_NOT_OWNED,
+                    code: Constants.HTTP_CODE_OK,
+                    message: Constants.HTTP_MESSAGE_OK,
                 });
-            }
 
-            return res.status(Constants.HTTP_CODE_OK).json({
-                code: Constants.HTTP_CODE_OK,
-                message: Constants.HTTP_MESSAGE_OK,
+
+            })
+
+        }catch (error){
+            
+            return res.status(Constants.HTTP_CODE_INTERNAL_ERROR).json({
+                code: Constants.HTTP_CODE_INTERNAL_ERROR,
+                message: Constants.HTTP_MESSAGE_INTERNAL_ERROR,
             });
 
-
-        })
+        }
 
     }
 }
@@ -303,6 +393,10 @@ module.exports = {
 function getAuthorStringFromArray(authorsArray) {
     let stringAuthors = "";
 
+    if(!authorsArray){
+        return stringAuthors;
+    }
+
     authorsArray.forEach(author => stringAuthors = stringAuthors + author + ", ");
 
     if(stringAuthors.length > 0){
@@ -314,6 +408,10 @@ function getAuthorStringFromArray(authorsArray) {
 }
 
 function getIsbn13(identifiers){
+
+    if(!identifiers){
+        return null;
+    }
     
     for(var i = 0; i < identifiers.length; i++){
         if(identifiers[i].type === "ISBN_13"){
