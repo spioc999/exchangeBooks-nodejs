@@ -10,11 +10,15 @@
         }
     },
     "host": "localhost:5000",
-    "basePath": "/api/",
+    "basePath": "/api",
     "tags": [
         {
             "name": "Users",
             "description": "API for users in the system"
+        },
+        {
+            "name" : "Books",
+            "description" : "API for getting info about books"
         }
     ],
     "schemes": [
@@ -45,7 +49,7 @@
                         "required": true,
                         "in" : "body",
                         "schema" : {
-                            "$ref" : "#/definitions/LoginRequest"
+                            "$ref" : "#/definitions/LoginBody"
                         }
                     }
                 ],
@@ -63,7 +67,7 @@
                 }
             }
         },
-        "/users/" : {
+        "/users" : {
             "post" : {
                 "tags": [
                     "Users"
@@ -81,7 +85,7 @@
                         "required": true,
                         "in" : "body",
                         "schema" : {
-                            "$ref" : "#/definitions/RegistrationRequest"
+                            "$ref" : "#/definitions/RegistrationBody"
                         }
                     }
                 ],
@@ -89,6 +93,200 @@
                     "200": {
                         "schema" : {
                             "$ref" : "#/definitions/OkResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/details/{isbn}" : {
+            "get" : {
+                "tags":[
+                    "Books"
+                ],
+                "description" : "Endpoint for getting books' details via ISBN-13",
+                "parameters":[
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    },
+                    {
+                        "name" : "isbn",
+                        "required": true,
+                        "in" : "path",
+                        "description" : "Book's ISBN-13",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/BooksDetailsResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books" : {
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "description" : "Endpoint for adding books",
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    },
+                    {
+                        "name" : "body",
+                        "required": true,
+                        "in" : "body",
+                        "schema" : {
+                            "$ref" : "#/definitions/AddBookBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/OkResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            },
+            "get" : {
+                "tags": [
+                    "Books"
+                ],
+                "description" : "Endpoint for getting all user's books",
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/GetBooksResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            },
+            "put" : {
+                "tags": [
+                    "Books"
+                ],
+                "description" : "Endpoint for updating book's status",
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    },
+                    {
+                        "name" : "body",
+                        "required": true,
+                        "in" : "body",
+                        "schema" : {
+                            "$ref" : "#/definitions/UpdateBooksStatusBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/OkResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/{id}" : {
+            "delete" : {
+                "tags": [
+                    "Books"
+                ],
+                "description" : "Endpoint for deleting books earlier added",
+                "parameters":[
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    },
+                    {
+                        "name" : "id",
+                        "required": true,
+                        "in" : "path",
+                        "description" : "idInsertion",
+                        "type": "id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/OkResponse"
+                        }
+                    },
+                    "400" : {
+                        "schema" : {
+                            "$ref" : "#/definitions/BadResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/books/search" : {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "description" : "Endpoint for getting books in the same province",
+                "parameters": [
+                    {
+                        "name" : "Authorization",
+                        "in" : "header",
+                        "required" : true,
+                        "description" : "Bearer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "schema" : {
+                            "$ref" : "#/definitions/SearchBooksResponse"
                         }
                     },
                     "400" : {
@@ -106,7 +304,7 @@
 
 
     "definitions" : {
-        "LoginRequest" : {
+        "LoginBody" : {
             "required": [
                 "email",
                 "psw"
@@ -120,14 +318,15 @@
                 }
             }
         },
-        "RegistrationRequest" : {
+        "RegistrationBody" : {
             "required": [
                 "username",
                 "psw",
                 "email",
                 "lastName",
                 "firstName",
-                "cap"
+                "city",
+                "province"
             ],
             "properties": {
                 "username" : {
@@ -145,7 +344,10 @@
                 "firstName" : {
                     "type" : "string"
                 },
-                "cap" : {
+                "city" : {
+                    "type" : "string"
+                },
+                "province" : {
                     "type" : "string"
                 }
             }
@@ -162,14 +364,94 @@
                     "type": "string"
                 },
                 "result" : {
-                    "$ref" : "#/definitions/TokenResponse"
+                    "$ref" : "#/definitions/LoginResult"
                 }
             }
         },
-        "TokenResponse": {
+        "LoginResult": {
             "properties": {
                 "bearerToken": {
                     "type": "string"
+                },
+                "user" : {
+                    "$ref" : "#/definitions/User"
+                }
+            }
+        },
+        "BooksDetailsResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "enum": [
+                        "SUCCESS"
+                      ],
+                    "type": "string"
+                },
+                "result" : {
+                    "$ref" : "#/definitions/BooksDetailsResult"
+                }
+            }
+        },
+        "BooksDetailsResult": {
+            "properties" : {
+                "id" : {
+                    "type": "integer"
+                },
+                "isbn" : {
+                    "type" : "string"
+                },
+                "title" : {
+                    "type" : "string"
+                },
+                "authors" : {
+                    "type" : "string"
+                },
+                "publishedDate" : {
+                    "type" : "string"
+                },
+                "smallThumbnailLink" : {
+                    "type" : "string"
+                },
+                "thumbnailLink" : {
+                    "type" : "string"
+                }
+            }
+        },
+        "AddBookBody" : {
+            "required": [
+                "idBook",
+                "note"
+            ],
+            "properties": {
+                "idBook" : {
+                    "type": "integer"
+                },
+                "note" : {
+                    "type" : "string"
+                }
+            }
+        },
+        "User": {
+            "properties" : {
+                "username" : {
+                    "type": "string"
+                },
+                "email" : {
+                    "type" : "string"
+                },
+                "lastName" : {
+                    "type" : "string"
+                },
+                "firstName" : {
+                    "type" : "string"
+                },
+                "city" : {
+                    "type" : "string"
+                },
+                "province" : {
+                    "type" : "string"
                 }
             }
         },
@@ -193,6 +475,140 @@
                 },
                 "message" : {
                     "type" : "string"
+                }
+            }
+        },
+        "GetBooksResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "enum": [
+                        "SUCCESS"
+                      ],
+                    "type": "string"
+                },
+                "result" : {
+                    "type" : "array",
+                    "items": {
+                        "$ref" : "#/definitions/GetBooksResult"
+                    }
+                }
+            }
+        },
+        "GetBooksResult" : {
+            "properties" : {
+                "id" : {
+                    "type": "integer"
+                },
+                "isbn" : {
+                    "type" : "string"
+                },
+                "title" : {
+                    "type" : "string"
+                },
+                "authors" : {
+                    "type" : "string"
+                },
+                "publishedDate" : {
+                    "type" : "string"
+                },
+                "smallThumbnailLink" : {
+                    "type" : "string"
+                },
+                "thumbnailLink" : {
+                    "type" : "string"
+                },
+                "bookStatus" : {
+                    "type": "integer"
+                },
+                "note" : {
+                    "type" : "string"
+                },
+                "dateInsertion" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                }
+            }
+        },
+        "SearchBooksResponse" : {
+            "properties": {
+                "code" : {
+                    "type": "integer"
+                },
+                "message" : {
+                    "enum": [
+                        "SUCCESS"
+                      ],
+                    "type": "string"
+                },
+                "result" : {
+                    "type" : "array",
+                    "items": {
+                        "$ref" : "#/definitions/SearchBooksResult"
+                    }
+                }
+            }
+        },
+        "SearchBooksResult": {
+            "properties" : {
+                "username" : {
+                    "type": "string"
+                },
+                "email" : {
+                    "type": "string"
+                },
+                "lastName" : {
+                    "type": "string"
+                },
+                "firstName" : {
+                    "type": "string"
+                },
+                "city" : {
+                    "type": "string"
+                },
+                "isbn" : {
+                    "type" : "string"
+                },
+                "title" : {
+                    "type" : "string"
+                },
+                "authors" : {
+                    "type" : "string"
+                },
+                "publishedDate" : {
+                    "type" : "string"
+                },
+                "smallThumbnailLink" : {
+                    "type" : "string"
+                },
+                "thumbnailLink" : {
+                    "type" : "string"
+                },
+                "bookStatus" : {
+                    "type": "integer"
+                },
+                "note" : {
+                    "type" : "string"
+                },
+                "dateInsertion" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                }
+            }
+        },
+        "UpdateBooksStatusBody" : {
+            "required": [
+                "id",
+                "status"
+            ],
+            "properties": {
+                "id" : {
+                    "type": "integer"
+                },
+                "status" : {
+                    "type" : "integer"
                 }
             }
         }
