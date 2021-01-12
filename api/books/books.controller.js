@@ -96,7 +96,7 @@ module.exports = {
                 })
                 
             }else{
-                const book = new Book(result.Id, result.Isbn, result.Title, result.Authors, result.PublishedDate, result.ThumbnailLink);
+                const book = new Book(result.Id, result.Isbn, result.Title, result.AllAuthors, result.PublishedDate, result.ThumbnailLink);
 
                 return res.status(Constants.HTTP_CODE_OK).json({
                     code: Constants.HTTP_CODE_OK,
@@ -186,7 +186,7 @@ module.exports = {
                 const insertions = [];
 
                 results.forEach((el) => {
-                    const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.Authors, el.PublishedDate, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
+                    const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.AllAuthors, el.PublishedDate, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
                     insertions.push(insertion);
                 });
 
@@ -293,7 +293,7 @@ module.exports = {
                 const books = [];
 
                 results.forEach(book => {
-                    const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
+                    const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.AllAuthors,
                         book.PublishedDate, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
 
                     books.push(bookToSend);

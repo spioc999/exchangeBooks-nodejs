@@ -37,8 +37,8 @@ module.exports = {
                 return callback(null, results[0]);
             }
         );
-    },
-    getUserById : (id, callback) => {
+    }
+    /*getUserById : (id, callback) => {
         pool.query(
             "select * from Users where Id = ?",
             [parseInt(id)],
@@ -51,5 +51,5 @@ module.exports = {
                 return callback(null, results[0]);
             }
         )
-    }
+    }*/
 }
