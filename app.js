@@ -25,5 +25,5 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 */
 
 
-const port = process.env.APP_PORT || 5000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log('Server started on port ' + port));
