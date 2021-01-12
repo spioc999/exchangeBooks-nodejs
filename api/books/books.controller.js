@@ -53,7 +53,6 @@ module.exports = {
                                 bookFromGoogle.title,
                                 getAuthorStringFromArray(bookFromGoogle.authors),
                                 bookFromGoogle.publishedDate,
-                                bookFromGoogle.imageLinks.smallThumbnail,
                                 bookFromGoogle.imageLinks.thumbnail
                             );
                         }else{
@@ -62,7 +61,6 @@ module.exports = {
                                 bookFromGoogle.title,
                                 getAuthorStringFromArray(bookFromGoogle.authors),
                                 bookFromGoogle.publishedDate,
-                                "https://via.placeholder.com/210x300?text=NO+IMAGE",
                                 "https://via.placeholder.com/210x300?text=NO+IMAGE"
                             );
                         }
@@ -84,7 +82,6 @@ module.exports = {
                                 bookToAdd.title,
                                 bookToAdd.authors,
                                 bookToAdd.publishedDate,
-                                bookToAdd.smallThumbnailLink,
                                 bookToAdd.thumbnailLink
                             );
 
@@ -99,7 +96,7 @@ module.exports = {
                 })
                 
             }else{
-                const book = new Book(result.Id, result.Isbn, result.Title, result.Authors, result.PublishedDate, result.SmallThumbnailLink, result.ThumbnailLink);
+                const book = new Book(result.Id, result.Isbn, result.Title, result.Authors, result.PublishedDate, result.ThumbnailLink);
 
                 return res.status(Constants.HTTP_CODE_OK).json({
                     code: Constants.HTTP_CODE_OK,
@@ -189,7 +186,7 @@ module.exports = {
                 const insertions = [];
 
                 results.forEach((el) => {
-                    const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.Authors, el.PublishedDate, el.SmallThumbnailLink, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
+                    const insertion = new Insertion(el.Id, el.Isbn, el.Title, el.Authors, el.PublishedDate, el.ThumbnailLink, el.BookStatus, el.Note, el.DateInsertion);
                     insertions.push(insertion);
                 });
 
@@ -297,7 +294,7 @@ module.exports = {
 
                 results.forEach(book => {
                     const bookToSend = new InsertionFullDetails(book.Username, book.Email, book.LastName, book.FirstName, book.City, book.Isbn, book.Title, book.Authors,
-                        book.PublishedDate, book.SmallThumbnailLink, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
+                        book.PublishedDate, book.ThumbnailLink, book.BookStatus, book.Note, book.DateInsertion);
 
                     books.push(bookToSend);
                 });

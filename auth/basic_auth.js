@@ -1,6 +1,8 @@
 const auth = require("basic-auth");
 const compare = require("tsscmp");
 const Constants = require("../constants/constants");
+require('dotenv').config();
+
 
 module.exports = {
     basicAuth : (req, res, next) => {
@@ -34,8 +36,8 @@ function check(clientId, clientSecret) {
 
     var valid = true;
 
-    valid = compare(clientId, Constants.CLIENT_ID) && valid;
-    valid = compare(clientSecret, Constants.CLIENT_SECRET) && valid;
+    valid = compare(clientId, process.env.CLIENT_ID) && valid;
+    valid = compare(clientSecret, process.env.CLIENT_SECRET) && valid;
 
     return valid;
 }

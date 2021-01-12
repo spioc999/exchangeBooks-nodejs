@@ -16,14 +16,13 @@ module.exports = {
     },
     addBooksDetails : (data, callback) => {
         pool.query(
-            "insert into Books(Isbn, Title, Authors, PublishedDate, SmallThumbnailLink, ThumbnailLink) " +
+            "insert into Books(Isbn, Title, Authors, PublishedDate, ThumbnailLink) " +
             "values (?, ?, ?, ?, ?, ?)",
             [
                 data.isbn,
                 data.title,
                 data.authors,
                 data.publishedDate,
-                data.smallThumbnailLink,
                 data.thumbnailLink
             ],
             (error, results) => {
@@ -57,7 +56,7 @@ module.exports = {
     },
     getAllUsersInsertions : (idUser, callback) => {
         pool.query(
-            "select I.Id, B.Isbn, B.Title, B.Authors, B.PublishedDate, B.SmallThumbnailLink, B.ThumbnailLink, I.BookStatus, I.Note, I.DateInsertion " +
+            "select I.Id, B.Isbn, B.Title, B.Authors, B.PublishedDate, B.ThumbnailLink, I.BookStatus, I.Note, I.DateInsertion " +
             "from Insertions as I inner join Books as B on I.IdBook = B.Id " +
             "where I.IdUser = ? " + 
             "order by I.DateInsertion DESC",
@@ -93,7 +92,7 @@ module.exports = {
     searchBooksInSameProvince : (idUser, province, callback) => {
 
         pool.query(
-            "select U.Username, U.Email, U.LastName, U.FirstName, U.City, B.Isbn, B.Title, B.Authors, B.PublishedDate, B.SmallThumbnailLink, B.ThumbnailLink, " +
+            "select U.Username, U.Email, U.LastName, U.FirstName, U.City, B.Isbn, B.Title, B.Authors, B.PublishedDate, B.ThumbnailLink, " +
             "I.BookStatus, I.Note, I.DateInsertion from Users U inner join Insertions I on U.Id = I.IdUser " + 
             "inner join Books B on I.IdBook = B.Id " + 
             "where I.IdUser <> ? and U.Province = ? and I.BookStatus <> 3 " + 

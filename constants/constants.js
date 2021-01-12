@@ -18,9 +18,7 @@ module.exports = Object.freeze({
     MESSAGE_ERROR_RECORD_NOT_OWNED : "RECORD NOT OWNED",
     //BasicAuth
     HTTP_MESSAGE_ERROR_BASIC_AUTH : "Unauthorized: invalid basic auth",
-    CLIENT_ID : "ExchangeBooksFlutterApp",
-    CLIENT_SECRET : "yK23YvAbWkEVr2G3",
     //JWT
-    EXPIRATION_TOKEN : "1h",
+    EXPIRATION_TOKEN : "2h",
     SALT_PSW : 10
 });

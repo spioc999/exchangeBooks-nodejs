@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:5000",
+    "host": "exchange-books-backend.herokuapp.com",
     "basePath": "/api",
     "tags": [
         {
@@ -22,7 +22,7 @@
         }
     ],
     "schemes": [
-        "http"
+        "https"
     ],
     "consumes": [
         "application/json"
@@ -411,9 +411,6 @@
                 "publishedDate" : {
                     "type" : "string"
                 },
-                "smallThumbnailLink" : {
-                    "type" : "string"
-                },
                 "thumbnailLink" : {
                     "type" : "string"
                 }
@@ -514,9 +511,6 @@
                 "publishedDate" : {
                     "type" : "string"
                 },
-                "smallThumbnailLink" : {
-                    "type" : "string"
-                },
                 "thumbnailLink" : {
                     "type" : "string"
                 },
@@ -578,9 +572,6 @@
                     "type" : "string"
                 },
                 "publishedDate" : {
-                    "type" : "string"
-                },
-                "smallThumbnailLink" : {
                     "type" : "string"
                 },
                 "thumbnailLink" : {
