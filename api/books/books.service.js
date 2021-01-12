@@ -17,7 +17,7 @@ module.exports = {
     addBooksDetails : (data, callback) => {
         pool.query(
             "insert into Books(Isbn, Title, AllAuthors, PublishedDate, ThumbnailLink) " +
-            "values (?, ?, ?, ?, ?, ?)",
+            "values (?, ?, ?, ?, ?)",
             [
                 data.isbn,
                 data.title,
