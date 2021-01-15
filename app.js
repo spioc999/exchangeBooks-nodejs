@@ -17,6 +17,11 @@ const swaggerUi = require('swagger-ui-express');
 swaggerDocument = require('./swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get("/", function(request, response){
+
+    response.sendFile('./index.html');
+
+})
 
 //DYNAMIC SWAGGER TODO
 /*const swaggerUi = require('swagger-ui-express');
