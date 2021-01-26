@@ -1,6 +1,7 @@
 const express = require('express');
 //const request = require('request');
 require('dotenv').config();
+var path = require('path');
 
 //ROUTERS
 const usersRouter = require("./api/users/users.router");
@@ -17,11 +18,42 @@ const swaggerUi = require('swagger-ui-express');
 swaggerDocument = require('./swagger.json');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+
+//TODO
 app.get("/", function(request, response){
 
-    response.sendFile('./index.html');
+    var filePath = "./index.html"
+    var resolvedPath = path.resolve(filePath);
+    response.sendFile(resolvedPath);
 
 })
+
+app.get("/public/img/:name", function(request, response){
+
+    try{
+
+        const name = request.params.name
+
+        if(!name){
+            return response.status(400).json({
+                code: 400,
+                message: "Error"
+            });
+        }
+
+        var filePath = "./public/img/" + name;
+        var resolvedPath = path.resolve(filePath);
+        response.sendFile(resolvedPath);
+
+
+    }catch(e){
+
+        return response.status(500).json({
+            code: 500,
+            message: "Error"
+        });
+    }
+});
 
 //DYNAMIC SWAGGER TODO
 /*const swaggerUi = require('swagger-ui-express');
