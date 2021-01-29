@@ -55,35 +55,67 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            .fill-height {
-                min-height: 100%;
-                height:auto !important; /* cross-browser */
-                height: 100%; /* cross-browser */
-            }
-        </style>
+
+    <style>
+        .f-25em{
+            font-size: 2.5em;
+        }
+        .fill-height {
+            min-height: 100%;
+            height:auto !important; /* cross-browser */
+            height: 100%; /* cross-browser */
+        }
+    </style>
     </head>
     <body>
-        <div class="container-fluid fill-height" style="background: linear-gradient(to bottom, #ffffff 0%, #b0b5b8 100%);">
-            <div style="background:transparent !important" class="jumbotron">
+        <div class="container-fluid fill-height" style="background: linear-gradient(to bottom, #ffffff 0%, #d8ecff 100%);">
+            <div class="row">
+                <div class="col-12 col-md-8 offset-md-2">
+                    <div class="row mt-3 mb-3 align-items-center">
+                        <div class="col-4 col-md-2 offset-4 offset-md-3">
+                            <img src="public/img/logoblank.png" alt="Logo" class="img-fluid animate__animated animate__fadeIn animate__slow" style="border: 0 !important;">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <h1 class="animate__animated animate__fadeIn animate__slow text-center f-25em">ExchangeBooks</h1>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-5">
+                <div class="col-10 col-md-6 offset-1 offset-md-3">
+                    <a href="https://github.com/spioc999/exchangeBooks-nodejs" target="_blank" class="btn btn-outline-dark btn-lg btn-block animate__animated animate__backInLeft animate__delay-1s">GIT BACKEND</a>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-10 col-md-6 offset-1 offset-md-3">
+                    <a href="https://exchange-books-backend.herokuapp.com/api-docs" target="_blank" class="btn btn-outline-success btn-lg btn-block animate__animated animate__backInRight animate__delay-1s">SWAGGER API</a>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-10 col-md-6 offset-1 offset-md-3 mb-4">
+                    <a href="https://github.com/spioc999/exchangeBooks-flutter" target="_blank" class="btn btn-outline-primary btn-lg btn-block animate__animated animate__backInLeft animate__delay-1s">GIT MOBILE APP</a>
+                </div>
+            </div>
+            <div class="row mt-5">
                 <div class="col-12">
-                    <div class="d-flex justify-content-center">
-                        <div class="row">
-                            <div class="d-flex align-items-center">
-                                <div class="col-3 offset-2">
-                                    <img src="public/img/logoblank.png" alt="Logo" class="img-fluid animate__animated animate__fadeIn" style="border: 0 !important;">
-                                </div>
-                                <div class="col-5">
-                                    <h1 class="animate__animated animate__fadeIn">ExchangeBooks</h1>
-                                </div>
-                            </div>
+                    <p class="text-center h6 animate__animated animate__backInRight animate__delay-1s">
+                        <small class="text-muted">Created by:</small></p>
+                </div>
+            </div>
+            <div class="row mt-2 animate__animated animate__backInRight animate__delay-1s">
+                <div class="col-12 col-md-8 offset-md-2">
+                    <div class="row mt-3 mb-3 align-items-center">
+                        <div class="col-4 col-md-1 offset-4 offset-md-4">
+                            <img src="public/img/me.png" alt="Me" class="img-fluid" style="border: 0 !important;">
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <p class="h4">Simone Pio Caronia</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <br/>
-            <p>SPC</p>
-            <img src="public/img/me.png">
+            
         </div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
