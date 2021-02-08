@@ -12,7 +12,7 @@ module.exports = {
 
             const body = req.body;
 
-            if(!body){
+            if(!body || Object.keys(body).length === 0){
                 return res.status(Constants.HTTP_CODE_NOTFOUND).json({
                     code: Constants.HTTP_CODE_NOTFOUND,
                     message: Constants.HTTP_MESSAGE_EMPTY_BODY,
@@ -55,7 +55,7 @@ module.exports = {
             
             const body = req.body;
         
-            if(!body){
+            if(!body || Object.keys(body).length === 0){
                 return res.status(Constants.HTTP_CODE_NOTFOUND).json({
                     code: Constants.HTTP_CODE_NOTFOUND,
                     message: Constants.HTTP_MESSAGE_EMPTY_BODY,

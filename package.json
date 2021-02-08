@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --sort test/test1_users_api_test.js test/test2_books_api_test.js"
   },
   "author": "spioc_999",
   "license": "MIT",
@@ -21,5 +21,10 @@
     "swagger-jsdoc": "^5.0.0",
     "swagger-ui-express": "^4.1.4",
     "tsscmp": "^1.0.6"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "mocha": "^8.2.1"
   }
+  
 }

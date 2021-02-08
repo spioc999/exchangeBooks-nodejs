@@ -51,7 +51,7 @@ module.exports = {
                             bookToAdd = new BookNoId(
                                 getIsbn13(bookFromGoogle.industryIdentifiers),
                                 bookFromGoogle.title,
-                                getAuthorStringFromArray(bookFromGoogle.authors),
+                                getAuthorStringFromArray(bookFromGoogle.authors) || bookFromGoogle.publisher,
                                 bookFromGoogle.publishedDate,
                                 bookFromGoogle.imageLinks.thumbnail
                             );
@@ -123,7 +123,7 @@ module.exports = {
 
             const body = req.body;
 
-            if(!body){
+            if(!body || Object.keys(body).length === 0){
                 return res.status(Constants.HTTP_CODE_NOTFOUND).json({
                     code: Constants.HTTP_CODE_NOTFOUND,
                     message: Constants.HTTP_MESSAGE_EMPTY_BODY,
@@ -325,7 +325,7 @@ module.exports = {
 
             const body = req.body;
 
-            if(!body){
+            if(!body || Object.keys(body).length === 0){
                 return res.status(Constants.HTTP_CODE_NOTFOUND).json({
                     code: Constants.HTTP_CODE_NOTFOUND,
                     message: Constants.HTTP_MESSAGE_EMPTY_BODY,
@@ -391,7 +391,7 @@ function getAuthorStringFromArray(authorsArray) {
     let stringAuthors = "";
 
     if(!authorsArray){
-        return stringAuthors;
+        return null;
     }
 
     authorsArray.forEach(author => stringAuthors = stringAuthors + author + ", ");
